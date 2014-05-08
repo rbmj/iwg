@@ -1,0 +1,95 @@
+$ORIGIN .
+$TTL 3600	; 1 hour
+usna.bluenet		IN SOA	dc0.usna.bluenet. hostmaster.usna.bluenet. (
+				352        ; serial
+				900        ; refresh (15 minutes)
+				600        ; retry (10 minutes)
+				86400      ; expire (1 day)
+				3600       ; minimum (1 hour)
+				)
+			NS	dc0.usna.bluenet.
+			NS	dc1.usna.bluenet.
+$TTL 600	; 10 minutes
+			A	10.1.70.18
+			A	10.1.70.37
+$TTL 3600	; 1 hour
+			MX	10 mail.usna.bluenet.
+$TTL 600	; 10 minutes
+			AAAA	fdc2:49bb:ada:1337:bad:c0dc:0:37
+			AAAA	fdc2:49bb:ada:1337:bad:c0de:0:18
+$ORIGIN usna.bluenet.
+$TTL 3600	; 1 hour
+_msdcs			NS	dc0
+$ORIGIN _tcp.Default-First-Site-Name._sites.usna.bluenet.
+$TTL 600	; 10 minutes
+_gc			SRV	0 100 3268 dc0.usna.bluenet.
+			SRV	0 100 3268 dc1.usna.bluenet.
+_kerberos		SRV	0 100 88 dc0.usna.bluenet.
+			SRV	0 100 88 dc1.usna.bluenet.
+_ldap			SRV	0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+$ORIGIN _tcp.usna.bluenet.
+_gc			SRV	0 100 3268 dc0.usna.bluenet.
+			SRV	0 100 3268 dc1.usna.bluenet.
+_kerberos		SRV	0 100 88 dc0.usna.bluenet.
+			SRV	0 100 88 dc1.usna.bluenet.
+_kpasswd		SRV	0 100 464 dc0.usna.bluenet.
+			SRV	0 100 464 dc1.usna.bluenet.
+_ldap			SRV	0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+$ORIGIN _udp.usna.bluenet.
+_kerberos		SRV	0 100 88 dc0.usna.bluenet.
+			SRV	0 100 88 dc1.usna.bluenet.
+_kpasswd		SRV	0 100 464 dc0.usna.bluenet.
+			SRV	0 100 464 dc1.usna.bluenet.
+$ORIGIN usna.bluenet.
+$TTL 3600	; 1 hour
+admin			A	10.1.70.22
+alpha			A	10.1.70.38
+beta			A	10.1.70.39
+CDX-GEN-LAPTOP		A	10.1.70.46
+dc0			A	10.1.70.18
+			AAAA	fdc2:49bb:ada:1337:bad:c0de:0:18
+$TTL 1200	; 20 minutes
+DC1			A	10.1.70.37
+			AAAA	fdc2:49bb:ada:1337:bad:c0dc:0:37
+$TTL 3600	; 1 hour
+delta			A	10.1.70.41
+$TTL 600	; 10 minutes
+DomainDnsZones		A	10.1.70.18
+			A	10.1.70.37
+			AAAA	fdc2:49bb:ada:1337:bad:c0dc:0:37
+			AAAA	fdc2:49bb:ada:1337:bad:c0de:0:18
+$ORIGIN DomainDnsZones.usna.bluenet.
+_ldap._tcp.Default-First-Site-Name._sites SRV 0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+_ldap._tcp		SRV	0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+$ORIGIN usna.bluenet.
+$TTL 3600	; 1 hour
+flawed			A	10.1.70.54
+$TTL 600	; 10 minutes
+ForestDnsZones		A	10.1.70.18
+			A	10.1.70.37
+			AAAA	fdc2:49bb:ada:1337:bad:c0dc:0:37
+			AAAA	fdc2:49bb:ada:1337:bad:c0de:0:18
+$ORIGIN ForestDnsZones.usna.bluenet.
+_ldap._tcp.Default-First-Site-Name._sites SRV 0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+_ldap._tcp		SRV	0 100 389 dc0.usna.bluenet.
+			SRV	0 100 389 dc1.usna.bluenet.
+$ORIGIN usna.bluenet.
+$TTL 3600	; 1 hour
+ftp			A	10.1.70.51
+gamma			A	10.1.70.40
+$TTL 1200	; 20 minutes
+gamma1			A	10.1.70.40
+$TTL 3600	; 1 hour
+general			A	10.1.70.46
+imap			CNAME	mail
+mail			A	10.1.70.19
+ns1			A	10.1.70.5
+smtp			CNAME	mail
+www			A	10.1.70.28
+www6			A	10.1.70.28
+			AAAA	fdc2:49bb:ada:1337:bad:c0de:0:28

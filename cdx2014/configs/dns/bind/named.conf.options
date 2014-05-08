@@ -1,0 +1,61 @@
+options {
+	directory "/var/cache/bind";
+
+
+	// version statement - inhibited for security
+	// (avoids hacking any known weaknesses)	
+	version "not currently available";
+
+	// allows notifies only from master
+	allow-notify {10.1.70.18;};
+
+	// disables all zone transfer requests
+	allow-transfer{"none";};
+
+	// Closed DNS - permits only local IPs to issue recursive queries 
+	// remove if an Open DNS required to support all users 
+	// or add additional ranges 
+	//allow-recursion {192.168.3.0/24;}; WE DONT WANT THIS
+
+        //acl "trusted" {
+        //  10.1.70.0/24;
+        //}
+
+        allow-query { any; };
+        allow-recursion{ 10.1.70.0/24; };
+        allow-query-cache { 10.1.70.0/24; };
+
+
+        // Forwarding allows hq.bluenet resolution
+        //forward only;
+        forwarders{ 10.1.10.5; 10.1.10.6; };
+
+
+        // <OLD JUNK>
+
+	//directory "/var/named";
+
+	// If your ISP provided one or more IP addresses for stable 
+	// nameservers, you probably want to use them as forwarders.  
+	// Uncomment the following block, and insert the addresses replacing 
+	// the all-0's placeholder.
+
+	// forwarders {
+	// 	0.0.0.0;
+	//}
+
+	//==================================================================
+	// If BIND logs error messages about the root key being expired,
+	// you will need to update your keys.  See https://www.isc.org/bind-keys
+	//==================================================================
+	//dnssec-validation auto;
+
+	//auth-nxdomain no;    # conform to RFC1035
+	//listen-on-v6 { any; };
+	// end of default stuff
+        // </OLD JUNK>
+
+
+
+};
+

@@ -1,0 +1,41 @@
+//
+// Do any local configuration here
+// The only config here is to get usna.bluenet from the AD
+//
+
+//logging {
+//  channel usna_log{
+//    file "/var/log/named/example.log" versions 3 size 2m;
+//    severity info;
+//    print-severity yes;
+//    print-time yes;
+//    print-category yes;
+//  };
+//  category default {
+//    usna_log;
+//  };
+//};
+
+
+zone "usna.bluenet" {
+	type slave;
+        file "/var/cache/bind/db.usna.bluenet";
+        masters { 10.1.70.18; };
+};        
+      
+//zone "hq.bluenet" {
+//        type forward;
+//        forwarders { 10.1.10.5; };
+//};
+
+// TEMPLATE FOR REVERSE ZONE LOOKUPS
+//zone "1.168.192.in-addr.arpa" {
+//	type slave;
+//        file "db.192";
+//        masters { 10.1.70.18; };
+//};
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
