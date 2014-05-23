@@ -1,8 +1,6 @@
 DNS Setup Explanation
 =====================
 
-------------------------------------
-
 Strategy
 --------
 </p>
@@ -22,10 +20,10 @@ Details
 The exact configuration is included in this repo. Here, I will provide some explanation for our choices in the config files.
 
 In options, we
- - set version to "not currently available" to slow recon
-  - allowed only the AD DC to notify (send updates) as per decision principle 1.
-   - Disabled zone transfers to prevent red cell from easily obtaining our network configuration.
-    - Allowed recursion through either the main AD DC or the backup. We also forwarded to hq's nameserver. These options were required in order to successfully resolve external queries, which we had to allow.
+- set version to "not currently available" to slow recon
+- allowed only the AD DC to notify (send updates) as per decision principle 1.
+- Disabled zone transfers to prevent red cell from easily obtaining our network configuration.
+- Allowed recursion through either the main AD DC or the backup. We also forwarded to hq's nameserver. These options were required in order to successfully resolve external queries, which we had to allow.
 
     In local, we just made one zone for our domain. We played around with logging reverse zone lookups, but found them to be unnecessary, thus breaking decision principle 1.
 
@@ -42,9 +40,9 @@ In options, we
     Recommended Resources
     ---------------------
     </p>
-    The [zytrax] site was invaluable. 
+    The [zytrax](http://www.zytrax.com/books/dns/) site was invaluable. 
 
-    Wish I had learned about [named-checkconf] and [named-checkzone] months earlier.
+    Wish I had learned about [named-checkconf](http://linux.die.net/man/8/named-checkconf) and [named-checkzone](http://ftp.isc.org/www/bind/arm95/man.named-checkzone.html) months earlier.
 
     dig @NAMESERVER DOMAINNAME returns the DNS records for a query.
 
@@ -53,10 +51,3 @@ In options, we
 
     ----------------------
     **-Zane**
-
-    [zytrax]:http://www.zytrax.com/books/dns/
-    [named-checkconf]:http://linux.die.net/man/8/named-checkconf
-    [named-checkzone]:http://ftp.isc.org/www/bind/arm95/man.named-checkzone.html
-
-
-
