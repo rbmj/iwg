@@ -1,0 +1,41 @@
+Index of CTF Tools and Techniques
+=================================
+
+Purpose
+-------
+
+I often learn about useful tools and techniques to use in CTFs, only to forget about them during competition. This file will help us remember them.
+
+
+
+Tools
+-----
+
+dd - linux CLI - powerful version of cp that allows one to scrape hidden files. Example: dd if=secret.jpg bs=1 skip=1337 of=hidden.zip 
+
+ltrace - linux CLI - returns calls to libraries invoked in execution of an executable. Example: ltrace ./crackme ARG1 ARG2
+
+printf - linux CLI - handy for converting hex to decimal for the skip argument of dd. Example: printf "%d\n" 0x00deadbeef
+
+tr - linux CLI - translates characters from STDIN according to two sets of characters. Example: cat foo.txt | tr 'ABCD' '1234'
+
+xxd - linux CLI - get a hexdump of a binary. Can also reverse a hexdump back into a binary. Example: xxd foo.gif
+
+
+
+Tips
+----
+
+Frequency analysis: 
+- The most frequent letters in English are "ETAOIN SHRDLU" from most to less frequent.
+- The most frequent two-letter combinations in English are "th", "er", "on", "an", "re", and "he".
+- The most frequent three-letter combinations in English are "the", "and", "tha", and "ent".
+
+/usr/share/dict/words - linux - Contains a dictionary of English words. Useful with grep to manually solve substitution ciphers.
+
+
+
+Authorship
+----------
+
+For now, just Zane Markel
