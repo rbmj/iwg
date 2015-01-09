@@ -1,0 +1,35 @@
+Today's lesson started with a review of overflow1. However, unlike yesterday,
+where we overloaded the ip through brute force, we walked through the
+disassembly of overflow1 (objdump -d -Mintel overflow1) to find out exactly
+where we need to insert the address. We found that in a function called foo,
+0x28 (40 decimal) bytes are set into the stack for a buffer. Add four bytes of
+for a 32-bit saved ebp, and we've got 44 junk bytes to overwrite until we get to
+the beginning of the return address. Thus, a more elegant way to get shell from
+overflow1 is:
+    $ python -c "print('A'*44+'\x5b\x84\x04\x08')" > payload
+    $ cat payload - | ./overflow1
+
+Next, we started on overflow2. Trying the same payload, we find that we get a 
+segfault as soon as we enter something into stdin. Looking at the objdump, we 
+see that we alloc'd 0x29 bytes this time. Add another 'A' to the payload (that's
+45 A's in a row), and we can get shell.
+    $ python -c "print('A'*45+'\x5b\x84\x04\x08')" > payload2
+    $ cat payload2 - | ./overflow1
+
+overflow3 is a bit more tricky. The stack size is the same, but the address does
+not get overwritten with exactly what we input. Looking at the objdump, we see
+that the foo function has grown a bit. By going through the instructions step by
+step, we can eventually deduce that foo has an xor loop that essentially xor's
+every character in the input with 0xb9. In other words, the loop is equivalent 
+to:
+    for(char *p=buf; *p; ++p){ *p = *p ^ 0xb9; }
+So, you need to calculate the input you'll need to end up with vuln's addr in ip
+, we can use python to do so:
+    $ python -c "hex(0x0804845b ^ 0xb9b9b9b9)"
+which results in '0xb1bd3de2'. (If the line above confuses you, it might help to
+bear in mind that '^' is the xor operator, and to un-xor something, all you have
+to do is xor it again. That is, X ^ Y ^ Y = X. So when overflow3 does 
+0xb1bd3de2 ^ 0xb9b9b9b9, we get the address of vuln in the ip.) Thus:
+    $ python -c "print('A'*45+'\xe2\x3d\xbd\xb1')" > payload3
+    $ cat payload3 - | ./overflow3 
+will get us the shell.
