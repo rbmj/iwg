@@ -1,0 +1,11 @@
+# From: http://rafalcieslak.wordpress.com/2013/04/02/dynamic-linker-tricks-using-ld_preload-to-cheat-inject-features-and-investigate-programs/
+gcc random_num.c -o random_num
+gcc -shared -fPIC unrandom.c -o unrandom.so
+export LD_PRELOAD=$PWD/unrandom.so ./random_num
+
+ldd random_nums
+nm -D /lib/x86_64-linux-gnu/libc.so.6 | less
+LD_PRELOAD=$PWD/unrandom.so ldd random_num
+
+gcc -shared -fPIC  evil_open.c -o evil_open.so -ldl
+LD_PRELOAD=$PWD/evil_open.so gnome-calculator
