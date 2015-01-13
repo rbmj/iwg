@@ -1,0 +1,34 @@
+Today we learned about format strings.
+
+%x takes the data stored in a variable and prints it in its hex representation.
+%08x prints 8 hex characters.
+%n counts the number of bytes printed thus far and puts it into the associated
+address (cumulative, not since the last %n).hack it
+
+Problems occur when you're short of arguments to supply your format strings in printf
+(See fmt-uncommon-bad.c), which just takes stuff off the stack instead. You'll get
+compiler error messages, but you can still do it.
+
+Vulnerabilities occur when you start printing user input, as occurs in fmt_vuln.c. As 
+the program shows, things work when you print stuff in properly formatted data (such
+as %s), but crap like printf(buf) causes problems.
+For instance, the following gets me A's:
+    $ ./fmt_vuln  AAAA%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x
+this is because the format string has worked its way back on the stack and is now 
+printing itself (again, as hex).
+
+To take advantage of this, you need to get the input to read itself in order to overwrite 
+the ip to get a jump into someplace bad.
+
+For instance, fmt_vuln2 has a 'bad' function at...
+    $ objdump -M intel -d fmt_vuln2 | grep bad
+... 080484ad <bad>
+then, piggybacking off of Devon's hard work, we can use:
+    $ ./fmt_vuln2 $(printf '\x2c\xa0\x04\x08')AAAA$(printf '\x2d\xa0\x04\x08')AAAA$(printf '\x2c\xa0\x04\x08')%08x.%0134x%08x.%n.%0981x.%n.%0130x.%n
+to execute the bad function. Why the above command achieves what it does is left as an
+exercise for the reader.
+
+Helpful tidbits:
+- don't do the math. Manual binary search with trial and error is better. (This is in
+regards to those big-ass %x calls, like %0981x, in the hacking command.)
+
