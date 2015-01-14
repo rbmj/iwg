@@ -1,0 +1,46 @@
+Fuzzing Lesson Writeup
+======================
+
+- Goto https://github.com/m154500/iwg and navigate to the cyber_stakes_trng
+folder.
+- install zzuf with:
+    sudo apt-get install zzuf
+
+- Print 0's:
+    hd -vn 64 /dev/zero
+
+- Intercept and fuzz those 0's:
+    zzuf hd -vn 64 /dev/zero
+    zzuf cat /dev/zero | hd -vn 64
+
+- zzuf has parameters
+    zzuf -s 15 cat /dev/zero | hd -vn 64
+    zzuf -s 2015 cat /dev/zero | hd -vn 64
+    zzuf -r 0.5 -s 15 cat /dev/zero | hd -vn 64
+
+- zzuf is a filter
+    cat /dev/zero | zzuf -r 0.01 | hd -vn 32
+
+- Useful options:
+    -d debug mode
+    -E exclude files
+    -I include files
+    -c only fuzz files in fuzzed app's command line (ignores configs)
+    -v verbose
+    -C 0 do not stop at the first crash
+    -q quiet -- suppress the fuzzed command's output
+    -T 3 timeout of 3 seconds to avoid hanging
+
+- You can specify ranges for the seed and ratio
+    zzuf -cv -s 0:5 -r 0.0001:0.1 hd -vn 64 /dev/zero
+
+- Get a payload that causes a crash by checking the params for a try that
+causes a crash. 
+    zzuf -s 0:300 -c -C 0 -q -T 3 objdump -x ExtExport.exe
+    zzuf -r 0.004 -s 115 < ExtExport.exe > sigabrt.exe
+    objdump -x sigabrt.exe
+    
+- (BONUS) investigate the crash with valgrind
+    sudo apt-get install valgrind
+    timeout 10 valgrind -q objdump -x sigabrt.exe > muymal.txt 2> vallog.txt
+    timeout 10 valgrind -q objdump -x ExtExport.exe > bueno.txt
