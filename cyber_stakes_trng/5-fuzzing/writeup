@@ -44,3 +44,37 @@ causes a crash.
     sudo apt-get install valgrind
     timeout 10 valgrind -q objdump -x sigabrt.exe > muymal.txt 2> vallog.txt
     timeout 10 valgrind -q objdump -x ExtExport.exe > bueno.txt
+
+- ( (BONUS) BONUS ) radamsa
+- a black-box fuzzer (like zzuf)
+
+     git clone http://haltp.org/git/radamsa.git
+     cd radamsa
+     make
+     sudo make install
+     radamsa --help
+
+- it's like cat, but fuzzes
+    echo "aaa" | radamsa
+
+- it's NOT deterministic without -s X
+    echo 'aaaaaa' | radamsa
+    echo 'aaaaaa' | radamsa
+    echo 'aaaaaa' | radamsa -s 7
+    echo 'aaaaaa' | radamsa -s 7
+
+- gen more cases
+    echo "1 + (7 - 3)" | radamsa -s 2015 -n 15
+
+- another formulation on the cli:
+    gzip -c /bin/bash > sample.gz
+    while true; do radamsa sample.gz | gzip -d > /dev/null; done
+
+- stop on fatal error:
+    gzip -c /bin/bash > sample.gz
+    while true
+    do
+      radamsa sample.gz > fuzzed.gz
+      gzip -dc fuzzed.gz > /dev/null
+      test $? -gt 127 && break
+    done
