@@ -1,0 +1,54 @@
+gcc -fno-stack-protector -Wno-format-security -z execstack -m32 -o hackme hackme.c
+
+objdump -d -Mintel [executable]
+
+gdb, the gnu debugger, is "the greatest program ever created by Richard Stahlman."
+
+I can't fit all of the information from today's writeup in one text file. Instead, it would 
+be much better if you follow along and try out all of the following gdb commands:
+
+$ gdb hackme
+(in gdb:)
+alias ds=disassemble                # save keystrokes 
+set disassembly-flavor intel        # make disassembly prettier
+br main                             # sets a breakpoint at main
+r "emacs blows"                     # run the program with the argument "emacs blows"
+ds                                  # disassemble the current point of the program (main)
+x $esp                              # inspect esp
+i f                                 # inspect frame
+x/16x $esp                          # inspect the last 16 bytes of hex of esp
+si                                  # step to next machine instruction 
+                                    # this will go into the contents of hello()
+ni                                  # next instruction (skipping over func calls)
+... (ni until the process finishes)
+r "emacs is the worst"              # start up the program again 
+br foo                              # set a b
+c                                   # continue to next breakpoint (foo)
+i f
+ds
+b *0x08048496                       # on my machine, this breaks at strcpy
+ds
+p ($epb - $esp)/4 + 2               # the number of words (hence '/4') in the stack frame,
+                                    # including sbp and ret (hence '+ 2')
+                                   
+(How to use all this for a buffer overflow, etc. is left as an exercise for the reader.)
+
+NOTE: gdb puts extra stuff on the stack, so you can't just copy and paste exploits.
+
+For reference, here's the stack for a function call:
+
+ /* higher memory */
+ ------------
+| argv[1]    |
+ ------------
+| ret        |
+ ------------
+| spb        | // saved epb
+ ------------  // <-- ebp
+ .
+ .
+ .
+ ------------ // <-- esp
+| ???       | 
+ ------------
+ /* lower memory */
