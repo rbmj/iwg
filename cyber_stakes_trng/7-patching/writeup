@@ -1,0 +1,35 @@
+wget blairmason.me/iwg/patch1
+
+This binary has two vulnerabilities:
+1) backdoor : backdoor will get you a shell
+2) there is a classic buffer overflow vulnerability
+
+Since we don't have the source, we want to do binary patching in order to clear up the vulnerabilities.
+
+To clear up the backdoor, we want to stop the function call to open up the shell.
+
+Examining the objdump reveals that there is a call to exec_shell at 0x804867f. (You can examine the code yourself to ensure that this is the right place.)
+
+Install nasm with 
+    sudo aptitude install nasm
+    sudo aptitude install ht
+
+Now let's patch it:
+    cp patch1 patch1.bak # make a backup
+    hte patch1 # this is a patching tool
+First, change the *mode* to disasm/x86. Then, *Goto* the location where the call to exec_shell is at (only the last 3 digits of memory need to be entered, so "0x67f" for me), then replace that 5-byte command with 5 nops (with *edit*). Save it, then you will have patched the backdoor!
+
+Now we have to fix the buffer overflow vuln.
+
+Make test.asm:
+[BITS 32]
+mov DWORD [esp+0x8], 256
+mov eax, 0x08048545
+jmp eax
+
+Then,
+    nasm test.asm
+    xxd test        # This is the hex we want to put in.
+manually copy over this hex into the nops at the end of main in patch1. It will do a manual jump to readN. We'll want to do this in place of the gets call which is vulnerable.
+
+I could not write all of the stuff for that part. It required math and stuff, which does not lend itself to being efficiently written in plaintext. But needless to say, it worked. If you don't believe me, check out patch1 vs patch1.bak.
