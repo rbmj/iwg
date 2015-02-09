@@ -74,14 +74,14 @@ domain without authenticating.  This means will allow forged mail to be
 delivered to local recipients, but any mail leaving the server can
 be trusted as legitimate.  To illustrate this more clearly:
 
-Incoming mail:
-   - Is the sender a member of the local domain (usna.bluenet)?
-      - (YES) Are they authenticated?
-	     - (YES) ACCEPT.
-		 - (NO) REJECT.
-	  - (NO) Is the recipient a member of the local domain (usna.bluenet)?
-	     - (YES) ACCEPT.
-		 - (NO) REJECT.
+	Incoming mail:
+	   - Is the sender a member of the local domain (usna.bluenet)?
+	      - (YES) Are they authenticated?
+		     - (YES) ACCEPT.
+			 - (NO) REJECT.
+		  - (NO) Is the recipient a member of the local domain (usna.bluenet)?
+		     - (YES) ACCEPT.
+			 - (NO) REJECT.
 
 Some email servers are configured such that a person can send email via
 that server to any recipient claiming to be any sender.  These servers
@@ -160,16 +160,16 @@ smtpd_recipient_restrictions is the main configuration option here.  These
 filters are applied in order.  Thus, the main filter that applies to all
 mail after the recipient is known looks like:
 
-IF user is logged in, but sends mail from an address other than their own:
-   REJECT
-ELSE IF mail recipient is a local user, but that user does not exist:
-   REJECT
-ELSE IF user is authenticated:
-   ACCEPT
-ELSE IF mail recipient is a local user:
-   ACCEPT
-ELSE:
-   REJECT
+	IF user is logged in, but sends mail from an address other than their own:
+	   REJECT
+	ELSE IF mail recipient is a local user, but that user does not exist:
+	   REJECT
+	ELSE IF user is authenticated:
+	   ACCEPT
+	ELSE IF mail recipient is a local user:
+	   ACCEPT
+	ELSE:
+	   REJECT
 
 The most important thing here is to prevent the server from acting as an
 open relay.  This happens when any user, without authenticating, can send
