@@ -25,4 +25,6 @@ someone who has participated in CDX before, should coordinate the following task
 In bello
 --------
 Cyber lawyers need to be aware of everything that is happening during CDX in order to ensure that the team is
-not at risk of losing points.
+not at risk of losing points. Thus, cyber lawyering has some inherent leadership responsibilities. However, there
+is no reason that the cyber lawyers must have formal leadership positions within CDX.
+NOT DONE! More joyous wonder is yet to come!
