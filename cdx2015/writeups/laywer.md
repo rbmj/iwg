@@ -27,4 +27,11 @@ In bello
 Cyber lawyers need to be aware of everything that is happening during CDX in order to ensure that the team is
 not at risk of losing points. Thus, cyber lawyering has some inherent leadership responsibilities. However, there
 is no reason that the cyber lawyers must have formal leadership positions within CDX.
-NOT DONE! More joyous wonder is yet to come!
+
+Additionally, cyber laywers need to build a rapport with White Cell. The better you get along with White Cell, the more easily you both can work together to not lose points.
+
+Also, be confident arguing for points back. For instance, when we seemingly had computer restarts that were not our fault, we successfully argued for points back by using the power of evidence (i.e. logs), rapport with White Cell, and rules.
+
+Conclusion
+----------
+Having a cyber lawyer team is essential. It's not hard, but it does require somebody with CDX experience to lead the laywer team.
