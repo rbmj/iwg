@@ -1,0 +1,54 @@
+################################################################################
+# SQL commands to know:
+################################################################################
+
+# Retrieving data
+    SELECT * 
+    FROM <Table_To_Query>   # e.g. Users_Table
+    WHERE <Condition>       # e.g. Name = 'Alice'
+
+# Changing data
+    UPDATE <Table>
+    SET <Var>=<Val>
+    WHERE <Condition>       # e.g. Name = 'Alice'
+
+# Adding data
+    INSERT INTO <Table>
+    VALUES <tuple(s)>       # e.g. ('John', 'M'), ('Cindy', 'F')
+
+# Remove some data
+    DELETE ... FROM ... WHERE
+
+# Delete an entire table
+    DROP TABLE <Table>
+
+################################################################################
+# Doing attacks
+################################################################################
+
+Websites often put user inputted data right into a SQL query. The trick to a basic SQL injection is to craft input that is 1) treated as executable SQL and 2) does something to give you useful information
+
+For example, the following can get you the results of an entire table in specific situations:
+' OR 1=1; --
+
+# Tips
+- Sometimes it helps to inject code right into the URL. This method will get around any client side filtering.
+
+- If you get an error message and don't know where your input is in it, trying putting a consipicuous, unique string. (e.g. ...MYSQLCODEISHERE...) Furthermore, this method can help you figure out which characters, if any, are modified or escaped (see below).
+
+- "... SELECT null, null, null, ..." helps you figure out the number of columns in the table. You get an error with phrasing like "wrong number of columns" if you input the wrong number of null's.
+    - After you get the right number of null's, you can methodically modify certain null's in order to figure out what information the rows correspond to.
+
+- Fun fact: googling hashes is a great way to reverse them
+
+################################################################################
+# Preventing attacks
+################################################################################
+
+- SIMPLE APPROACH: filter input 
+(e.g. by modifying, rejecting, or escaping special characters)
+
+- BEST APPROACH: separate code and data
+1) Prepare - get a template string w/ '?' where input will go
+2) Bind - method of attaching user input to specific '?' characters in prep string
+3) Execute - actually run the prepare string
