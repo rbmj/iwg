@@ -56,6 +56,10 @@ pfSense
 Just a few notes on setting up pfSense.
 
 First, pfSense NATs by default - make sure you disable that in Firewall->NAT->Outbound.
+Or, instead of disabling NAT, you can enable Advanced Outbound NAT (AON, e.g. manual NAT)
+and write a NAT rule outbound from the 192.168.0.0/16 subnet so that non-exercise net
+workstations can access SIMNET/{!USNA}.BLUENET sites, as without NAT the reverse route
+does not exist.
 
 pfSense also gets strange if you don't define a LAN interface, or if you don't intend to
 manage it through the LAN interface.  At install time, put the LAN interface on the
