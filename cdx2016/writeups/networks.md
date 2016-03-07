@@ -29,10 +29,11 @@ you connect those physical NICs, then the virtual switch should "just work" for 
 Next, to create all of the individual subnets that will be used for CDX, you create distributed
 port groups.  You assign each port group a VLAN ID - one unique VLAN ID per layer two subnet.
 See Network Diagram for details.  Note that any network that is going to have layer 2 bridging
-(e.g. inline IPS or bridging router) needs to allow promiscuous mode - you can do
-this by editing the security settings on the port group.  One possible future improvement is
-allowing port-specific overrides, and only allowing promiscuous mode on the individual ports
-that are connected to the necessary VMs.
+(e.g. inline IPS or bridging router) needs to have all of the security settings disabled (i.e.
+allow promiscuous, MAC address changes, and forged transmits) - you can do this by editing the
+security settings on the port group.  One possible future improvement is allowing port-specific
+overrides, and only allowing promiscuous mode on the individual ports that are connected to the
+necessary VMs (the bridging machines).
 
 One wrinkle in the VDS system is that interfacing with the physical world is cumbersome. The
 easiest way to connect with the physical world is to make standard host-based networks.  These
