@@ -67,3 +67,12 @@ manage it through the LAN interface.  At install time, put the LAN interface on 
 interface you plan to use to access the webConfigurator, even if that isn't "LAN" in the
 traditional sense.
 
+FTP-Proxy Routing
+------------------
+
+In order to enable transparent FTP proxying, you first need to create a new gateway that
+has as its destination the proxy server.  Then, you need to create a new rule that matches
+FTP connections and under "Advanced Features", change the Gateway to the gateway you just
+defined.  Don't bother with iptables bullshit, BUT IP forwarding needs to be enabled on
+the proxy.
+
