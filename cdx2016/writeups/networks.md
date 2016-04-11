@@ -73,6 +73,9 @@ FTP-Proxy Routing
 In order to enable transparent FTP proxying, you first need to create a new gateway that
 has as its destination the proxy server.  Then, you need to create a new rule that matches
 FTP connections and under "Advanced Features", change the Gateway to the gateway you just
-defined.  Don't bother with iptables bullshit, BUT IP forwarding needs to be enabled on
-the proxy.
+defined.  Then, you need to setup the iptables rules.  This was (for us):
+
+    iptables -t nat -A PREROUTING -i eth0 -p tcp ! -d 10.1.70.20 --dport 21 -j REDIRECT --to-ports 21
+
+With that, if you install iptables-persistent and choose to save the rule, it should work.   
 
