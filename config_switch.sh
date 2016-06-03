@@ -23,6 +23,14 @@ create_vlan () {
     echo no shutdown
 }
 
+create_vlan_dhcp () {
+    echo vlan $1
+    echo name $2
+    echo no shutdown
+    echo interface vlan $1
+    echo ip helper-address $3
+}
+
 output_trunk () {
     echo interface gigabite0/$1
     echo no shutdown
@@ -44,12 +52,15 @@ if [ "x$1" != xCENTRAL ] && [ "x$1" != xRACK ] ; then
     usage $0
 fi
 
+echo service dhcp
+
 OUTSIDE_VLAN=201
 WARROOM_VLAN=202
 SERVER_VLAN=203
+DHCP_ADDRESS='192.168.64.1'
 
 create_vlan $OUTSIDE_VLAN OUTSIDE
-create_vlan $WARROOM_VLAN WARROOM
+create_vlan_dhcp $WARROOM_VLAN WARROOM $DHCP_ADDRESS
 create_vlan $SERVER_VLAN SERVER
 
 for i in `seq 1 2 12` ; do
